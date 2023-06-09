@@ -17,6 +17,7 @@ try:
 except FileNotFoundError:
     pass
 
+# Get project by ID
 @app.route('/project/<project_id>')
 def get_project(project_id):
     project = next((p for p in projects if p['id'] == project_id), None)
@@ -25,6 +26,7 @@ def get_project(project_id):
     else:
         return jsonify({'message': 'Project not found'}), 404
 
+# Create a new project
 @app.route('/project', methods=['POST'])
 def create_project():
     try:
@@ -50,6 +52,7 @@ def create_project():
     except:
         return jsonify({'message': 'Invalid request'}), 400
 
+# Mark a project as completed
 @app.route('/project/<project_id>/complete', methods=['POST'])
 def complete_project(project_id):
     project = next((p for p in projects if p['id'] == project_id), None)
@@ -61,6 +64,7 @@ def complete_project(project_id):
     else:
         return jsonify({'message': 'Project not found'}), 404
 
+# Add a task to a project
 @app.route('/project/<project_id>/task', methods=['POST'])
 def add_task_to_project(project_id):
     project = next((p for p in projects if p['id'] == project_id), None)
@@ -88,10 +92,12 @@ def add_task_to_project(project_id):
     else:
         return jsonify({'message': 'Project not found'}), 404
 
+# Save projects to pickle file
 def save_data(data):
     with open('projects.pickle', 'wb') as file:
         pickle.dump(data, file)
 
+# Filter the list of dictionaries based on specified fields
 def filter_list_of_dicts(list_of_dicts, fields):
     filtered_dicts = []
     for item in list_of_dicts:
@@ -102,6 +108,7 @@ def filter_list_of_dicts(list_of_dicts, fields):
         filtered_dicts.append(filtered_item)
     return filtered_dicts
 
+# Get all projects
 @app.route('/projects')
 def get_projects():
     try:
@@ -114,6 +121,7 @@ def get_projects():
         pass
     return jsonify(projects)
 
+# Get all tasks in a project
 @app.route('/project/<project_id>/tasks')
 def get_all_tasks_in_project(project_id):
     project = next((p for p in projects if p['id'] == project_id), None)
